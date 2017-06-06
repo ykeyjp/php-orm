@@ -1,0 +1,55 @@
+{
+  "name": "ykey/orm",
+  "description": "PHP ORM Library.",
+  "version": "0.1.0",
+  "type": "library",
+  "keywords": [
+    "database",
+    "orm"
+  ],
+  "homepage": "https://github.com/ykeyjp/php-orm",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "ykey",
+      "email": "ykey.jp@gmail.com",
+      "homepage": "https://github.com/ykeyjp",
+      "role": "developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/ykeyjp/php-orm/issues"
+  },
+  "config": {
+    "process-timeout": 0
+  },
+  "scripts": {
+    "build": "phing build"
+  },
+  "autoload": {
+    "psr-4": {
+      "ykey\\orm\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ykey\\orm\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "url": "https://github.com/ykeyjp/php-annotation.git",
+      "type": "vcs"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "ykey/annotation": "*"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "*",
+    "phing/phing": "*",
+    "phpmd/phpmd": "*",
+    "phpunit/phpunit": "*"
+  }
+}
