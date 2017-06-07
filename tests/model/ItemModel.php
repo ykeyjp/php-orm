@@ -7,23 +7,23 @@ use ykey\orm\Entity;
  * Class ExampleModel
  *
  * @package ykey\orm\model
- * @Entity(name:example, connection:default)
+ * @entity(name:example, connection:default)
  */
 class ItemModel extends Entity
 {
     /**
      * @var int
-     * @Attribute(type:int, length:10, primary:true, autoincrement:true)
+     * @attribute(type:int, length:10, primary:true)
      */
     public $id;
     /**
      * @var string
-     * @Attribute(name:nickname, type:string, length:32, index:true, unique:true)
+     * @attribute(name:nickname, type:string, length:32, unique:true)
      */
     public $name;
     /**
      * @var string
-     * @Attribute(type:string, length:64, index:true, nullable:true)
+     * @attribute(type:string, length:64, nullable:true)
      */
     public $email;
 }

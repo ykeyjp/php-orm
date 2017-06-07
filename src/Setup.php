@@ -1,27 +1,72 @@
 <?php
 namespace ykey\orm;
 
+use ykey\orm\driver\ConnectionInterface;
+
+/**
+ * Class Setup
+ *
+ * @package ykey\orm
+ */
 class Setup
 {
-    private static $manager = [];
+    /**
+     * @var ConnectionInterface[]
+     */
+    private static $connections = [];
 
-    public static function register(string $name, DriverInterface $driver)
+    /**
+     * @param string              $name
+     * @param ConnectionInterface $connection
+     */
+    public static function register(string $name, ConnectionInterface $connection): void
     {
-        self::$manager[$name] = new ModelManager($driver);
+        self::$connections[$name] = $connection;
     }
 
-    public static function registerDefault(DriverInterface $driver)
+    /**
+     * @param ConnectionInterface $connection
+     *
+     * @internal param ConnectionInterface $driver
+     */
+    public static function registerDefault(ConnectionInterface $connection): void
     {
-        self::register('default', $driver);
+        self::register('default', $connection);
     }
 
-    public static function hasManager(string $name): bool
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public static function has(string $name): bool
     {
-        return isset(self::$manager[$name]);
+        return isset(self::$connections[$name]);
     }
 
-    public static function getManager(string $name): ?ModelManager
+    /**
+     * @return bool
+     */
+    public static function hasDefault(): bool
     {
-        return self::$manager[$name] ?? null;
+        return self::has('default');
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return null|ConnectionInterface
+     */
+    public static function get(string $name): ?ConnectionInterface
+    {
+        return self::$connections[$name] ?? null;
+    }
+
+    /**
+     * @return null|ConnectionInterface
+     */
+    public static function getDefault(): ?ConnectionInterface
+    {
+        return self::get('default');
     }
 }

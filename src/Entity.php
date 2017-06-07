@@ -1,6 +1,11 @@
 <?php
 namespace ykey\orm;
 
+/**
+ * Class Entity
+ *
+ * @package ykey\orm
+ */
 abstract class Entity implements EntityInterface
 {
     public static function findOne()
@@ -15,12 +20,19 @@ abstract class Entity implements EntityInterface
     {
     }
 
-    public function save()
+    public function isDirty(): bool
     {
+        return false;
     }
 
-    public function remove()
+    public function save(): bool
     {
+        return true;
+    }
+
+    public function remove(): bool
+    {
+        return true;
     }
 
     public function __destruct()
