@@ -4,16 +4,16 @@ namespace ykey\orm\model;
 use ykey\orm\Entity;
 
 /**
- * Class ExampleModel
+ * Class ItemModel
  *
  * @package ykey\orm\model
- * @entity(name:example, connection:default)
+ * @entity(name:items, connection:default)
  */
 class ItemModel extends Entity
 {
     /**
      * @var int
-     * @attribute(type:int, length:10, primary:true)
+     * @attribute(type:int, primary:true, autoincrement:true)
      */
     public $id;
     /**
@@ -26,4 +26,14 @@ class ItemModel extends Entity
      * @attribute(type:string, length:64, nullable:true)
      */
     public $email;
+    /**
+     * @var int
+     * @attribute(type:int, length:3)
+     */
+    public $age;
+    /**
+     * @var \DateTime
+     * @attribute(name: modified_at, type:timestamp)
+     */
+    public $modifiedAt;
 }

@@ -168,6 +168,20 @@ class EntityAnnotation
      *
      * @return bool
      */
+    public function isAttributeAutoIncrement(string $name): bool
+    {
+        if (!isset($this->attributes[$name])) {
+            return false;
+        }
+
+        return $this->attributes[$name]['autoincrement'] ?? false;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
     public function isAttributeUnique(string $name): bool
     {
         if (!isset($this->attributes[$name])) {

@@ -2,6 +2,7 @@
 namespace ykey\orm;
 
 use ykey\annotation\adapter\Memory;
+use ykey\orm\driver\ConnectionInterface;
 
 /**
  * Class EntityManager
@@ -44,6 +45,22 @@ class EntityManager
     }
 
     /**
+     * @param string $name
+     *
+     * @return null|ConnectionInterface
+     */
+    public function getConnection(string $name = 'default'): ?ConnectionInterface
+    {
+        if (Setup::has($name)) {
+            return Setup::get($name);
+        } elseif (Setup::hasDefault()) {
+            return Setup::getDefault();
+        }
+
+        return null;
+    }
+
+    /**
      * @param string $entitiyClassName
      *
      * @return EntityDefinition
@@ -65,6 +82,7 @@ class EntityManager
             $attr->setLength($info->getAttributeLength($name));
             $attr->setNullable($info->isAttributeNullable($name));
             $attr->setPrimary($info->isAttributePrimary($name));
+            $attr->setAutoIncrement($info->isAttributeAutoIncrement($name));
             $attr->setUnique($info->isAttributeUnique($name));
         }
         $this->caches[$entitiyClassName] = $entity;

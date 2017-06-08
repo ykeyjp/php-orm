@@ -3,6 +3,7 @@ namespace ykey\orm;
 
 use PHPUnit\Framework\TestCase;
 use ykey\orm\model\ItemModel;
+use ykey\orm\query\SQL;
 
 class ModelTest extends TestCase
 {
@@ -18,11 +19,13 @@ class ModelTest extends TestCase
         $sql = <<<_
 CREATE TABLE items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    fld1 TEXT,
-    fld2 INTEGER(8) NOT NULL
+    nickname VARCHAR(32) NOT NULL UNIQUE,
+    email VARCHAR(64),
+    age INTEGER(3),
+    modified_at TIMESTAMP NOT NULL
 )
 _;
-        $connection->execute($sql);
+        $connection->execute(new SQL($sql));
         $this->connection = $connection;
     }
 
@@ -42,8 +45,10 @@ _;
     public function testSave()
     {
         $item = new ItemModel;
-        $item->name = 'name';
+        $item->name = 'username';
         $item->email = 'user@example.com';
+        $item->age = 20;
+        $item->modifiedAt = new \DateTime();
         $this->assertNull($item->id);
         $success = $item->save();
         $this->assertTrue($success);

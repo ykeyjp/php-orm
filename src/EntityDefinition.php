@@ -65,4 +65,50 @@ class EntityDefinition
 
         return $attribute;
     }
+
+    /**
+     * @return string[]
+     */
+    public function getAttributeNames(): array
+    {
+        return array_keys($this->attributes);
+    }
+
+    /**
+     * @return AttributeDefinition[]
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return null|AttributeDefinition
+     */
+    public function getAttribute(string $name): ?AttributeDefinition
+    {
+        return $this->attributes[$name] ?? null;
+    }
+
+    /**
+     * @return AttributeDefinition[]
+     */
+    public function getPrimaryAttributes(): array
+    {
+        return array_filter($this->attributes, function (AttributeDefinition $attribute) {
+            return $attribute->isPrimary();
+        });
+    }
+
+    /**
+     * @return AttributeDefinition[]
+     */
+    public function getUniqueAttributes(): array
+    {
+        return array_filter($this->attributes, function (AttributeDefinition $attribute) {
+            return $attribute->isUnique();
+        });
+    }
 }

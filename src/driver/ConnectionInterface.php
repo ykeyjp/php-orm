@@ -2,6 +2,7 @@
 namespace ykey\orm\driver;
 
 use ykey\orm\exception\ConnectionException;
+use ykey\orm\query\SQL;
 
 /**
  * Interface ConnectionInterface
@@ -26,18 +27,18 @@ interface ConnectionInterface
     public function isOpened(): bool;
 
     /**
-     * @param string $sql
+     * @param SQL $sql
      *
      * @return StatementInterface
      */
-    public function query(string $sql): StatementInterface;
+    public function query(SQL $sql): StatementInterface;
 
     /**
-     * @param string $sql
+     * @param SQL $sql
      *
      * @return bool
      */
-    public function execute(string $sql): bool;
+    public function execute(SQL $sql): bool;
 
     /**
      * @return bool

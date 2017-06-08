@@ -31,6 +31,10 @@ class AttributeDefinition
     /**
      * @var bool
      */
+    private $isAutoIncrement = false;
+    /**
+     * @var bool
+     */
     private $isUnique = false;
 
     /**
@@ -111,6 +115,22 @@ class AttributeDefinition
     public function isPrimary(): bool
     {
         return $this->isPrimary;
+    }
+
+    /**
+     * @param bool $autoIncrement
+     */
+    public function setAutoIncrement(bool $autoIncrement): void
+    {
+        $this->isAutoIncrement = $autoIncrement;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoIncrement(): bool
+    {
+        return $this->isAutoIncrement;
     }
 
     /**

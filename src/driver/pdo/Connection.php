@@ -4,6 +4,7 @@ namespace ykey\orm\driver\pdo;
 use ykey\orm\driver\ConnectionInterface;
 use ykey\orm\driver\exception\ConnectionException;
 use ykey\orm\driver\StatementInterface;
+use ykey\orm\query\SQL;
 
 /**
  * Class Connection
@@ -67,12 +68,13 @@ class Connection implements ConnectionInterface
             if ($driver === 'mysql') {
                 $connection->setAttribute(\PDO::ATTR_AUTOCOMMIT, false);
                 $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+                $connection->exec('SET sql_mode=\'ANSI_QUOTES\'');
             }
             $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $connection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
             $connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-            $connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
-            $connection->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
+            $connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+            $connection->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, true);
             $this->connection = $connection;
         } catch (\PDOException $exception) {
             throw new ConnectionException('could not open connection.', 0, $exception);
@@ -98,35 +100,60 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * @param string $sql
+     * @param SQL $sql
      *
      * @return StatementInterface
      *
      * @throws ConnectionException
      */
-    public function query(string $sql): StatementInterface
+    public function query(SQL $sql): StatementInterface
     {
         if (!$this->isOpened()) {
             throw new ConnectionException('connection is not open.', 1);
         }
-        $statement = $this->connection->prepare($sql);
+        $statement = $this->connection->prepare($sql->getQuery());
+        foreach ($sql->getPlaceholders() as $holder => $data) {
+            if (is_null($data[0])) {
+                $type = \PDO::PARAM_NULL;
+            } elseif ($data[1] === 'bool') {
+                $type = \PDO::PARAM_BOOL;
+            } elseif ($data[1] === 'int') {
+                $type = \PDO::PARAM_INT;
+            } else {
+                $type = \PDO::PARAM_STR;
+            }
+            $statement->bindValue($holder, $data[0], $type);
+        }
+        $statement->execute();
 
         return new Statement($statement);
     }
 
     /**
-     * @param string $sql
+     * @param SQL $sql
      *
      * @return bool
      *
      * @throws ConnectionException
      */
-    public function execute(string $sql): bool
+    public function execute(SQL $sql): bool
     {
         if (!$this->isOpened()) {
             throw new ConnectionException('connection is not open.', 1);
         }
-        $statement = $this->connection->prepare($sql);
+        $statement = $this->connection->prepare($sql->getQuery());
+        foreach ($sql->getPlaceholders() as $holder => $data) {
+            if (is_null($data[0])) {
+                $type = \PDO::PARAM_NULL;
+            } elseif ($data[1] === 'bool') {
+                $type = \PDO::PARAM_BOOL;
+            } elseif ($data[1] === 'int') {
+                $type = \PDO::PARAM_INT;
+            } else {
+                $type = \PDO::PARAM_STR;
+            }
+            $statement->bindValue($holder, $data[0], $type);
+        }
         $result = $statement->execute();
         $statement->closeCursor();
 

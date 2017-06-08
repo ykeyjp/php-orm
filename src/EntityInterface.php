@@ -14,9 +14,13 @@ interface EntityInterface
 
     public static function count();
 
+    public function isNew(): bool;
+
     public function isDirty(): bool;
 
     public function save(): bool;
 
     public function remove(): bool;
+
+    public function toArray(): array;
 }

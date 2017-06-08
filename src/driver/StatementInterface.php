@@ -9,11 +9,6 @@ namespace ykey\orm\driver;
 interface StatementInterface
 {
     /**
-     * @return bool
-     */
-    public function execute(): bool;
-
-    /**
      * @return null|array
      */
     public function fetch(): ?array;

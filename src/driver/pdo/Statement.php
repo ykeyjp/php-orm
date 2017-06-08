@@ -26,14 +26,6 @@ class Statement implements StatementInterface
     }
 
     /**
-     * @return bool
-     */
-    public function execute(): bool
-    {
-        return $this->stmt->execute();
-    }
-
-    /**
      * @return null|array
      */
     public function fetch(): ?array

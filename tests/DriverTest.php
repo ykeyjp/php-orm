@@ -2,6 +2,7 @@
 namespace ykey\orm;
 
 use PHPUnit\Framework\TestCase;
+use ykey\orm\query\SQL;
 
 /**
  * Class DriverTest
@@ -40,7 +41,7 @@ CREATE TABLE items (
     fld2 INTEGER(8) NOT NULL
 )
 _;
-        $this->assertTrue($connection->execute($sql));
+        $this->assertTrue($connection->execute(new SQL($sql)));
 
         return $connection;
     }
@@ -52,8 +53,7 @@ _;
      */
     public function testQuery(driver\pdo\Connection $connection)
     {
-        $statement = $connection->query('SELECT * FROM sqlite_master WHERE name = "items"');
-        $this->assertTrue($statement->execute());
+        $statement = $connection->query(new SQL('SELECT * FROM sqlite_master WHERE name = "items"'));
         $row = $statement->fetch();
         $this->assertNotNull($row);
         $this->assertArrayHasKey('type', $row);
